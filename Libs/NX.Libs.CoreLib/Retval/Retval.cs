@@ -2,13 +2,10 @@
 {
     public class Retval : IRetval
     {
-        public RetvalStatus Status { get; set; } = RetvalStatus.None;
+        public RetvalStatus Status { get; set; } = RetvalStatus.Success;
         public string? Explanation { get; set; } = null;
 
-        public Retval()
-        {
-        }
-
+        public Retval() { }
         public Retval(RetvalStatus status, string? explanation = null)
         {
             Status = status;
@@ -20,13 +17,8 @@
     {
         public T? Data { get; set; } = default;
 
-        public Retval() : base()
-        {
-        }
-
-        public Retval(T data, string? explanation = null) : base(RetvalStatus.Success, explanation)
-        {
-            Data = data;
-        }
+        public Retval() { }
+        public Retval(T data, string? explanation = null) : base(RetvalStatus.Success, explanation) { Data = data; }
+        public Retval(RetvalStatus status, T data, string? explanation = null) : base(status, explanation) { Data = data; }
     }
 }

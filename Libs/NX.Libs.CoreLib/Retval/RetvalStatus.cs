@@ -2,7 +2,6 @@
 {
     public enum RetvalStatus
     {
-        None,
         Success,
         Information,
         Warning,
