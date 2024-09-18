@@ -6,5 +6,6 @@
         Information,
         Warning,
         Error,
+        Exception
     }
 }

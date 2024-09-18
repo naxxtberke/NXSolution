@@ -10,7 +10,7 @@
             }
             catch (Exception ex)
             {
-                (customErrorHandler ?? DefaultErrorHandler)(ex);
+                customErrorHandler(ex);
             }
         }
         public static T? Execute<T>(Func<T> func, Action<Exception>? customErrorHandler = null)
@@ -21,14 +21,13 @@
             }
             catch (Exception ex)
             {
-                (customErrorHandler ?? DefaultErrorHandler)(ex);
+                customErrorHandler(ex);
                 return default;
             }
         }
-        private static void DefaultErrorHandler(Exception ex)
+        public class Options
         {
-            // Varsayılan hata işleme işlemleri (loglama, uyarı vb.)
-            Console.WriteLine($"Hata oluştu: {ex.Message}");
+            public bool ThrowException { get; set; }
         }
     }
 }
