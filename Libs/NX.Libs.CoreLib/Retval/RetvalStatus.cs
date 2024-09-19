@@ -2,10 +2,10 @@
 {
     public enum RetvalStatus
     {
-        None,
         Success,
         Information,
         Warning,
         Error,
+        Exception
     }
 }
