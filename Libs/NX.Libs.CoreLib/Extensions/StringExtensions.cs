@@ -27,5 +27,10 @@ namespace NX.Libs.CoreLib.Extensions
 
             return string.Join("", str.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
         }
+
+        public static string GetByteToString(byte[] byteArr, Encoding encoding)
+        {
+            return encoding.GetString(byteArr);
+        }
     }
 }

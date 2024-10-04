@@ -4,7 +4,7 @@
     {
         RetvalStatus Status { get; }
         string? Explanation { get; }
-        Exception? Exception { get; }
+        CustomException? Exception { get; }
 
     }
     public interface IRetval<out T> : IRetval
