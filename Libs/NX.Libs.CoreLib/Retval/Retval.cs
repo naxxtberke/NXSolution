@@ -5,7 +5,7 @@ namespace NX.Libs.CoreLib.Retval
     {
         public RetvalStatus Status { get; set; } = RetvalStatus.Success;
         public string? Explanation { get; set; } = null;
-        public Exception? Exception { get; set; } = null;
+        public CustomException? Exception { get; set; } = null;
 
         public Retval() { }
         public Retval(RetvalStatus status, string? explanation = null)
@@ -17,7 +17,7 @@ namespace NX.Libs.CoreLib.Retval
         {
             Status = RetvalStatus.Exception;
             Explanation = explanation;
-            Exception = exception;
+            Exception = new(exception);
         }
     }
 
@@ -29,5 +29,17 @@ namespace NX.Libs.CoreLib.Retval
         public Retval(T data, string? explanation = null) : base(RetvalStatus.Success, explanation) { Data = data; }
         public Retval(RetvalStatus status, T? data, string? explanation = null) : base(status, explanation) { Data = data; }
         public Retval(Exception exception, T? data, string? explanation = null) : base(exception, explanation) { Data = data; }
+    }
+
+    public class CustomException
+    {
+        public string? Message { get; set; } = null;
+        public string? StackTrace { get; set; } = null;
+
+        public CustomException(Exception ex)
+        {
+            Message = ex.Message;
+            StackTrace = ex.StackTrace;
+        }
     }
 }
