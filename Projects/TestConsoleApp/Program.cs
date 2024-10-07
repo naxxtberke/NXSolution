@@ -30,67 +30,6 @@ Console.WriteLine(StringExtensions.GetByteToString(compressionService.Decompress
 Console.WriteLine(FilterHelper.Filter("berke", t => t.Length >= 5 || t.StartsWith("")));
 
 
-Exception b = new Exception();
-
-
-
-
-MemoryCacheManager<BaseClass> memoryCacheManager = new(TimeSpan.FromMilliseconds(10));
-
-Sport sport = new()
-{
-    Id = 0,
-    Name = "Tester0",
-    Denden = "b"
-};
-Sport sport1 = new()
-{
-    Id = 2,
-    Name = "12312312",
-    Denden = "bb"
-
-};
-Sport sport2 = new()
-{
-    Id = 2,
-    Name = "12312312312",
-    Denden = "bb"
-
-};
-
-Tourments tourments = new()
-{
-    Id = 2,
-    Surname = "Tester2"
-};
-memoryCacheManager.AddRange("Sports", sport, sport1, sport2);
-memoryCacheManager.Add("Tourments", tourments);
-
-memoryCacheManager.Update<Tourments>("Sports", t => t.Id == 2, t =>
-{
-    t.Surname = "Berke";
-});
-
-
-
-
-
 Console.ReadKey();
 
-
-class BaseClass
-{
-    public int Id { get; set; }
-}
-
-class Sport : BaseClass
-{
-    public string Name { get; set; }
-    public string Denden { get; set; }
-}
-
-class Tourments : BaseClass
-{
-    public string Surname { get; set; }
-}
 

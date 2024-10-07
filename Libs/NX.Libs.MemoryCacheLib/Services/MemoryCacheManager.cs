@@ -10,8 +10,8 @@ namespace NX.Libs.MemoryCacheLib.Services
         private readonly Timer _timer;
         public MemoryCacheManager(TimeSpan destroyTime)
         {
-            _dictionary = [];
-            _typeMap = [];
+            _dictionary = new Dictionary<string, List<TValue>>();
+            _typeMap = new Dictionary<string, Type>();
             _timer = new Timer(DestroyMemoryCache, null, destroyTime, destroyTime);
         }
 
@@ -30,7 +30,7 @@ namespace NX.Libs.MemoryCacheLib.Services
             if (values == null || values.Length == 0)
                 throw new InvalidOperationException("Values Null veya Boş Olamaz!");
 
-            Type? classType = values.First()?.GetType();
+            Type? classType = values.FirstOrDefault()?.GetType();
             if (classType != null)
             {
 
@@ -48,12 +48,25 @@ namespace NX.Libs.MemoryCacheLib.Services
             }
         }
 
-        public IEnumerable<TValue>? Get(string key)
+        public IEnumerable<T>? GetAll<T>(string key) where T : TValue
         {
-            if (_dictionary.TryGetValue(key, out var list))
-                return new List<TValue>(list);
+            if (_dictionary.TryGetValue(key, out List<TValue>? list))
+            {
+                // T türüne dönüştür ve liste olarak döndür
+                return list.OfType<T>().ToList();
+            }
             return null;
         }
+
+        public IEnumerable<T>? GetWithFilter<T>(string key, Func<T, bool> filter) where T : TValue
+        {
+            if (_dictionary.TryGetValue(key, out List<TValue>? list))
+            {
+                return list.OfType<T>().Where(filter).ToList();
+            }
+            return null;
+        }
+
 
         public void Update<T>(string key, Func<T, bool> filter, Action<T> updateAction) where T : TValue
         {
@@ -64,7 +77,10 @@ namespace NX.Libs.MemoryCacheLib.Services
                 foreach (T? item in values.OfType<T>().Where(filter)) // `OfType<T>()` ile T türünde olanları alır
                 {
                     // Güncelleme işlemini gerçekleştir
-                    updateAction(item);
+                    if (item != null)
+                    {
+                        updateAction(item);
+                    }
                 }
             }
         }
@@ -106,7 +122,7 @@ namespace NX.Libs.MemoryCacheLib.Services
         {
             if (!_dictionary.ContainsKey(key))
             {
-                _dictionary[key] = [];
+                _dictionary[key] = new List<TValue>();
             }
             _dictionary[key].Add(value);
         }

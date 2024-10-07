@@ -58,12 +58,24 @@ namespace NX.Libs.MemoryCacheLib.Services
             }
         }
 
-        public IEnumerable<TValue>? Get(string key)
+        public IEnumerable<T>? GetAll<T>(string key) where T : TValue
         {
-            if (_concurrentDict.TryGetValue(key, out var list))
-                return new List<TValue>(list);
+            if (_concurrentDict.TryGetValue(key, out ConcurrentBag<TValue>? list))
+            {
+                // T türüne dönüştür ve liste olarak döndür
+                return list.OfType<T>().ToList();
+            }
             return null;
         }
+        public IEnumerable<T>? GetWithFilter<T>(string key, Func<T, bool> filter) where T : TValue
+        {
+            if (_concurrentDict.TryGetValue(key, out ConcurrentBag<TValue>? list))
+            {
+                return list.OfType<T>().Where(filter).ToList();
+            }
+            return null;
+        }
+
 
         public void Update<T>(string key, Func<T, bool> filter, Action<T> updateAction) where T : TValue
         {
